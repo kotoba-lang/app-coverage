@@ -1,0 +1,33 @@
+{
+  "evaluated_at": "2026-05-05T08:51:55Z",
+  "overall_tests": 339,
+  "overall_pass": 326,
+  "overall_fail": 8,
+  "overall_skip": 5,
+  "overall_line_coverage_pct": 23.7,
+  "entries": [
+    {
+      "language": "go",
+      "directory": "70-tools/etzhayyim/etzhayyim",
+      "test_count": 339,
+      "pass_count": 326,
+      "fail_count": 8,
+      "skip_count": 5,
+      "line_coverage_pct": 23.7,
+      "available": true,
+      "duration": "",
+      "error": "go test exited with code 1"
+    },
+    {
+      "language": "go",
+      "directory": "60-apps/etzhayyim-project-murakumo/cmd/murakumo-mesh",
+      "test_count": 0,
+      "pass_count": 0,
+      "fail_count": 0,
+      "skip_count": 0,
+      "line_coverage_pct": 0.0,
+      "available": true,
+      "duration": ""
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "kotodama-c0v3r4g3",
+  "version": "1.0.0",
+  "description": "Coverage monitor worker for coverage.etzhayyim.com",
+  "main": "svelte/.svelte-kit/cloudflare/_worker.js",
+  "scripts": {
+    "test": "echo \"no tests\"",
+    "dev": "pnpm --dir svelte dev",
+    "build": "pnpm --dir svelte build",
+    "preview": "pnpm --dir svelte preview",
+    "check": "pnpm --dir svelte check"
+  },
+  "type": "module",
+  "dependencies": {
+    "@etzhayyim/graph-schema": "workspace:*"
+  }
+}

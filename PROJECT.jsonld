@@ -1,0 +1,21 @@
+{
+  "@context": [
+    "https://schema.org/",
+    {
+      "etzhayyim": "https://etzhayyim.com/schemas/"
+    }
+  ],
+  "@type": "Project",
+  "identifier": "etzhayyim-project-coverage",
+  "name": "Etzhayyim Coverage Monitor",
+  "status": "In Progress",
+  "description": "World coverage monitor for RisingWave-backed Etzhayyim coverage metrics. Exposes global coverage rate, zero-coverage domains, near-win domains, and large remaining gaps at coverage.etzhayyim.com.",
+  "url": "https://coverage.etzhayyim.com",
+  "hasPart": [
+    {
+      "@type": "WebApplication",
+      "name": "coverage-ui",
+      "url": "https://coverage.etzhayyim.com"
+    }
+  ]
+}

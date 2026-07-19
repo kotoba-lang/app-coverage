@@ -1,0 +1,45 @@
+{
+  "name": "kotodama-c0v3r4g3",
+  "main": "svelte/.svelte-kit/cloudflare/_worker.js",
+  "compatibility_date": "2025-03-17",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "nodejs_als"
+  ],
+  "assets": {
+    "directory": "./svelte/.svelte-kit/cloudflare/client",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "single-page-application"
+  },
+  "vars": {
+    "APP_ACTOR_HANDLE": "coverage-ui",
+    "APP_CAPABILITIES": "[\"domain-query\",\"analytics\"]",
+    "APP_DESCRIPTION": "World coverage monitor backed by RisingWave live materialized views",
+    "APP_DISPLAY_NAME": "Coverage",
+    "APP_EMBED_URL": "https://c0v3r4g3.etzhayyim.com/?embed=1",
+    "APP_FRAMEWORK": "sveltekit-edge-bff",
+    "AGENTGATEWAY_MCP_ROUTER_URL": "https://mcp.etzhayyim.com/xrpc/com.etzhayyim.mcp.message",
+    "APP_NANOID": "c0v3r4g3",
+    "APP_PERFORMER_TYPE": "service",
+    "APP_UI_TYPE": "appview"
+  },
+  "rules": [
+    {
+      "type": "CompiledWasm",
+      "globs": [
+        "**/*.wasm"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "c0v3r4g3.etzhayyim.com/*",
+      "zone_name": "etzhayyim.com"
+    },
+    {
+      "pattern": "coverage.etzhayyim.com/*",
+      "zone_name": "etzhayyim.com"
+    }
+  ]
+}

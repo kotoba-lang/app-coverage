@@ -1,0 +1,47 @@
+{
+  "@context": "https://etzhayyim.com/ns/kotodama/v1",
+  "@id": "did:web:coverage.etzhayyim.com",
+  "name": "coverage",
+  "nanoid": "c0v3r4g3",
+  "project": "coverage",
+  "runtimeType": "worker",
+  "uiType": "appview",
+  "performerType": "service",
+  "accent": "#0f766e",
+  "icon": "📈",
+  "profile": {
+    "displayName": "Coverage",
+    "description": "World coverage monitor backed by RisingWave live materialized views",
+    "operator": "etzhayyim.com",
+    "isBot": true,
+    "agentType": "autonomous",
+    "capabilities": [
+      "domain-query",
+      "analytics"
+    ]
+  },
+  "convoSystemPrompt": "You are coverage.etzhayyim.com. Explain world coverage based on RisingWave live materialized views. Prefer operational prioritization, denominator sanity, and concrete next actions.",
+  "routes": [
+    {
+      "host": "coverage.etzhayyim.com",
+      "paths": ["/"],
+      "tls": true
+    }
+  ],
+  "triggers": {
+    "http": {
+      "listen": "0.0.0.0:8080",
+      "spa": true,
+      "staticDir": "/wasm/svelte/build",
+      "routes": [
+        "/..."
+      ]
+    }
+  },
+  "governance": {
+    "classification": "internal",
+    "dataResidency": "jp",
+    "retentionPolicy": "1y",
+    "controlObjective": "Expose RisingWave world coverage metrics without mutating source-of-truth data."
+  }
+}
