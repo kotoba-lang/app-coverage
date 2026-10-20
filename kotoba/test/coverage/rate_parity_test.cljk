@@ -1,0 +1,26 @@
+(ns coverage.rate-parity-test
+  "aiueos/coverage_rate.cljk（判定コア）と正本（registry.ts / types.ts）の
+  parity。率計算・整数規約・拒否名が変われば落ちる drift 検査。"
+  (:require [clojure.test :refer [deftest is testing]]
+            [clojure.string :as str]
+            ["fs" :as fs]))
+
+(def types-src
+  (fs/readFileSync (str/join "/" ["kotoba" "src" "types.ts"]) "utf8"))
+(def registry
+  (fs/readFileSync (str/join "/" ["kotoba" "src" "registry.ts"]) "utf8"))
+
+(deftest rate-rules-match-guest
+  (testing "guest test-rate / test-cap / test-zero-denom: ratePercent の規則"
+    (is (str/includes? types-src "worldTotal <= 0) return 0"))
+    (is (str/includes? types-src "Math.min(100, Math.round(")))
+  (testing "guest test-uint / test-fail-closed: no float 規約（整数 percent）"
+    (is (str/includes? types-src "Number.isInteger(n) && n >= 0"))
+    (is (str/includes? types-src "n <= 100"))
+    (is (str/includes? types-src "no float")))
+  (testing "guest test-snapshot: 拒否名"
+    (is (str/includes? registry "missingRequiredFields"))
+    (is (str/includes? registry "invalidCounts"))
+    (is (str/includes? registry "invalidDidCount")))
+  (testing "guest test-dedup: 同一 domain は alreadyExists"
+    (is (str/includes? registry "alreadyExists"))))
