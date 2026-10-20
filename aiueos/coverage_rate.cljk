@@ -1,0 +1,84 @@
+(ns coverage.rate
+  "coverage 判定コア — itonami dapp bundle（pure, :effects #{}）。
+
+  world-coverage スナップショットの判定（正本: kotoba/src/registry.ts +
+  types.ts。**no float 規約**: 数え値は非負整数、率と存在確率は 0-100 の
+  整数 percent、小数が必要なら文字列）:
+
+  - **rate-percent**: worldTotal が 0 以下なら 0。そうでなければ
+    round(collected / worldTotal x 100) を **100 で上限**（過剰カバレッジは
+    100 に頭打ち）。
+  - **count は非負整数**（isUint）。percent は 0..100 の整数（isPct）。
+  - スナップショットは **domain 必須**、count 群が非整数・負なら拒否
+    （invalidCounts / invalidCount）。
+  - 同一 domain の再記録は **alreadyExists**（冪等）。
+
+  rate-percent: 整数 percent（小数禁止）
+  uint-ok: 1 = 非負整数 / pct-ok: 1 = 0..100 の整数
+  snapshot-judgment の戻り: 0 = 記録可 / 1 = missingRequiredFields
+    / 2 = invalidCounts / 3 = invalidCount（任意 count の不正）
+  dedup-take: 1 = alreadyExists / 0 = 新規
+
+  実行 host はスカラーのみ = KIR v3 / i64/direct ABI（kernel/selfhost 両対応）。
+
+  テストはゼロ引数 test-*、戻り 1/0:
+  <amu> test aiueos/coverage_rate.cljk"
+  (:export [main rate-percent uint-ok pct-ok snapshot-judgment dedup-take
+            test-rate test-cap test-zero-denom test-uint test-snapshot
+            test-dedup test-fail-closed]))
+
+(defn main [] :i64
+  0)
+
+(defn rate-percent [collected :i64 world-total :i64] :i64
+  (if (<= world-total 0)
+    0
+    (let [raw (quot (+ (* collected 100) (quot world-total 2)) world-total)]
+      (if (> raw 100) 100 raw))))
+
+(defn uint-ok [v :i64] :i64
+  (if (>= v 0) 1 0))
+
+(defn pct-ok [v :i64] :i64
+  (if (and (>= v 0) (<= v 100)) 1 0))
+
+(defn snapshot-judgment [has-domain :i64 counts-uint :i64 extra-counts-uint :i64] :i64
+  (if (= has-domain 0)
+    1
+    (if (= counts-uint 0)
+      2
+      (if (= extra-counts-uint 1) 0 3))))
+
+(defn dedup-take [same-domain :i64 has-existing :i64] :i64
+  (if (and (= same-domain 1) (= has-existing 1)) 1 0))
+
+;; --- tests（戻り 1 = pass） ------------------------------------------------
+
+(defn test-rate [] :i64
+  ;; 1/2 = 50、3/4 = 75（四捨五入）
+  (if (= (+ (rate-percent 1 2) (rate-percent 3 4)) 125) 1 0))
+
+(defn test-cap [] :i64
+  ;; 過剰カバレッジは 100 で頭打ち
+  (if (= (+ (rate-percent 200 100) (rate-percent 101 100)) 200) 1 0))
+
+(defn test-zero-denom [] :i64
+  ;; worldTotal が 0 以下は 0（割り算しない）
+  (if (= (+ (rate-percent 5 0) (rate-percent 5 -3)) 0) 1 0))
+
+(defn test-uint [] :i64
+  (if (= (+ (uint-ok 0) (uint-ok -1) (pct-ok 100) (pct-ok 101)) 2) 1 0))
+
+(defn test-snapshot [] :i64
+  ;; domain 必須・count は非負整数
+  (if (= (+ (snapshot-judgment 1 1 1) (snapshot-judgment 0 1 1)
+            (snapshot-judgment 1 0 1) (snapshot-judgment 1 1 0))
+         6)
+    1 0))
+
+(defn test-dedup [] :i64
+  (if (= (+ (dedup-take 1 1) (dedup-take 1 0) (dedup-take 0 1)) 1) 1 0))
+
+(defn test-fail-closed [] :i64
+  ;; percent は 0..100 の整数のまま（小数禁止）
+  (if (= (+ (pct-ok 0) (pct-ok -5)) 1) 1 0))

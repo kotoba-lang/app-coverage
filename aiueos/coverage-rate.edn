@@ -1,0 +1,20 @@
+;; app-coverage — itonami（dapp）の aiueos アプリ記述子（notes.edn 形）。
+;; 判定コアは aiueos/coverage_rate.cljk（率計算・整数規約・スナップショット判定）。
+;; 正本は kotoba/src/registry.ts + types.ts。pure（:effects #{}）。
+;; no float 規約: 数え値は非負整数、率は 0-100 の整数 percent。
+{:aiueos/component :app/coverage-rate
+ :aiueos/kind :app
+ :aiueos/trust :untrusted
+ :aiueos/source "coverage_rate.cljk"
+ :aiueos/wasm "coverage_rate.wasm"
+ :aiueos/entry "main"
+ :aiueos/args []
+ :aiueos/imports #{}
+ :aiueos/exports #{:app/main
+                   :app/rate-percent
+                   :app/uint-ok
+                   :app/pct-ok
+                   :app/snapshot-judgment
+                   :app/dedup-take}
+ :aiueos/effects #{}
+ :aiueos/limits {:memory-pages 16 :fuel 5000000}}
